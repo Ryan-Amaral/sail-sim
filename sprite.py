@@ -4,8 +4,8 @@ from graphics import *
 class Sprite:
     
     def __init__(self, points, fill=None, outline=None, width=None):
-        # save shape reference for drawing and built in graphics stuff
-        #self.shape = Polygon(points)
+        
+        self.shape = None
 
         # the position relative to the center
         self.position = np.mean(points, axis=0)
@@ -37,7 +37,19 @@ class Sprite:
     def set_position(self, x, y):
         self.position = (x, y)
 
-    def draw(self, window, fill="def", outline="def", width="def"):
+    def set_rotation(self, rad):
+
+        R = np.array(((np.cos(rad), -np.sin(rad)),
+                       (np.sin(rad), np.cos(rad))))
+
+        self.cur_points = (R @ self.original_points.transpose()).transpose()
+
+    def draw(self, window, fill="def", outline="def", width="def", undraw=True):
+
+        # undraw the old
+        if self.shape is not None:
+            self.shape.undraw()
+
         # get points in order and create shape
         points0 = self.cur_points + self.position
         points = [Point(x, y) for (x, y) in points0]
@@ -60,3 +72,5 @@ class Sprite:
             shape.setWidth(self.width)
 
         shape.draw(window)
+
+        self.shape = shape
