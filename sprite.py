@@ -3,7 +3,7 @@ from graphics import *
 
 class Sprite:
     
-    def __init__(self, points,):
+    def __init__(self, points, fill=None, outline=None, width=None):
         # save shape reference for drawing and built in graphics stuff
         #self.shape = Polygon(points)
 
@@ -16,7 +16,10 @@ class Sprite:
         # the points to update, for new rotations
         self.cur_points = np.copy(self.original_points)
 
-        self.fill = None
+        self.fill = fill
+        self.outline = outline
+        self.width = width
+
 
     def rotate(self, rad):
         
@@ -34,7 +37,7 @@ class Sprite:
     def set_position(self, x, y):
         self.position = (x, y)
 
-    def draw(self, window, fill="def", outline="def", thickness="def"):
+    def draw(self, window, fill="def", outline="def", width="def"):
         # get points in order and create shape
         points0 = self.cur_points + self.position
         points = [Point(x, y) for (x, y) in points0]
@@ -45,5 +48,15 @@ class Sprite:
             self.fill = fill
         if self.fill is not None:
             shape.setFill(self.fill)
+
+        if outline != "def":
+            self.outline = outline
+        if self.outline is not None:
+            shape.setOutline(self.outline)
+
+        if width != "def":
+            self.width = width
+        if self.width is not None:
+            shape.setWidth(self.width)
 
         shape.draw(window)
