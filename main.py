@@ -1,5 +1,6 @@
 from graphics import *
 from sprite import Sprite
+import numpy as np
 
 win = GraphWin(width = 1024, height = 512)
 win.setCoords(0, 0, 1024, 512)
@@ -8,5 +9,6 @@ win.setBackground("cyan3")
 #mySquare.draw(win)
 sprit = Sprite([(200,200), (400,200), (400,400), (200, 400)])
 sprit.translate(200,50)
+sprit.rotate(np.pi*0.25)
 sprit.draw(win)
 win.getMouse()
