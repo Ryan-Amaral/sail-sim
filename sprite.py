@@ -74,3 +74,5 @@ class Sprite:
         shape.draw(window)
 
         self.shape = shape
+
+        return shape
