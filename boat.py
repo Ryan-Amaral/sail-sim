@@ -3,7 +3,7 @@ from math import sqrt
 
 class Boat:
 
-    def __init__(self, points=None, fill=None, outline=None, width=None):
+    def __init__(self, waypoints, points=None, fill=None, outline=None, width=None):
         # status relative to boat
         self.sail_angle = 0
         self.rudder_angle = 0
@@ -21,7 +21,7 @@ class Boat:
         self.max_speed = 2 # meters per second
 
         # waypoints
-        self.waypoints = []
+        self.waypoints = waypoints
         self.waypoint_idx = 0
         # radius for boat to get within to count as hitting waypoint
         self.wp_radius = 5
@@ -76,7 +76,7 @@ class Boat:
         wp_dist_x = self.wp_x - self.x
         wp_dist_y = self.wp_y - self.y
 
-        wp_dist = sqrt(wp_dist_x^2 + wp_dist_y^2)
+        wp_dist = sqrt(wp_dist_x**2 + wp_dist_y**2)
 
         wp_dir_x = wp_dist_x/wp_dist
         wp_dir_y = wp_dist_y/wp_dist
@@ -88,7 +88,7 @@ class Boat:
         wp_dist_x = self.wp_x - self.x
         wp_dist_y = self.wp_y - self.y
 
-        wp_dist_2 = sqrt(wp_dist_x^2 + wp_dist_y^2)
+        wp_dist_2 = sqrt(wp_dist_x**2 + wp_dist_y**2)
 
         # update waypoint if needed
         if wp_dist < self.wp_radius:
