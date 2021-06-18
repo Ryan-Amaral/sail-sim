@@ -1,4 +1,5 @@
 from sprite import Sprite
+from math import sqrt
 
 class Boat:
 
@@ -8,6 +9,9 @@ class Boat:
         self.rudder_angle = 0
         self.heading = 0
         self.speed = 0
+        # current position
+        self.x = 0
+        self.y = 0
 
         # constants
         self.sail_min = -1
@@ -15,26 +19,28 @@ class Boat:
         self.rudder_min = -1
         self.rudder_max = 1
         self.max_speed = 2 # meters per second
-        
-        # global reference frame
-        # current position
-        self.x = 0
-        self.y = 0
-        # final goal position
-        self.final_x = 0
-        self.final_y = 0
-        # position of next waypoint
-        self.wp_x = 0
-        self.wp_y = 0
 
+        # waypoints
         self.waypoints = []
         self.waypoint_idx = 0
+        # radius for boat to get within to count as hitting waypoint
+        self.wp_radius = 5
+        # position of next waypoint
+        self.wp_x = self.waypoints[0][0]
+        self.wp_y = self.waypoints[0][1]
+
+        # final goal position
+        self.final_x = self.waypoints[-1][0]
+        self.final_y = self.waypoints[-1][1]
 
         # for rendering
         if points is not None:
             self.sprite = Sprite(points, fill, outline, width)
         else:
             self.sprite = None
+
+        # turns true when reached final waypoint
+        self.finished = False
 
     """
     Rotate the sail a number of radians.
@@ -64,7 +70,34 @@ class Boat:
     Ignore any actual physical constraints, just move to target.
     """
     def update_position_dummy(self):
-        pass
+
+        # first move towards waypoint
+
+        wp_dist_x = self.wp_x - self.x
+        wp_dist_y = self.wp_y - self.y
+
+        wp_dist = sqrt(wp_dist_x^2 + wp_dist_y^2)
+
+        wp_dir_x = wp_dist_x/wp_dist
+        wp_dir_y = wp_dist_y/wp_dist
+
+        self.x += wp_dir_x * self.max_speed
+        self.y += wp_dir_y * self.max_speed
+
+        # check if in or past current waypoint
+        wp_dist_x = self.wp_x - self.x
+        wp_dist_y = self.wp_y - self.y
+
+        wp_dist_2 = sqrt(wp_dist_x^2 + wp_dist_y^2)
+
+        # update waypoint if needed
+        if wp_dist < self.wp_radius:
+            self.waypoint_idx += 1
+            if self.waypoint_idx == len(self.waypoints):
+                self.finished = True
+                return
+            self.wp_x = self.waypoints[self.waypoint_idx][0]
+            self.wp_y = self.waypoints[self.waypoint_idx][1]
 
     """
     Actuates the boat based on the given inputs, and updates its position.
