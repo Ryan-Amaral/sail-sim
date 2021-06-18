@@ -1,4 +1,4 @@
-from boat import Boat
+from sail.boat import Boat
 import matplotlib.pyplot as plt
 
 

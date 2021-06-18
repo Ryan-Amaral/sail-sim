@@ -1,4 +1,4 @@
-from sprite import Sprite
+from sail.sprite import Sprite
 from math import sqrt
 
 class Boat:
